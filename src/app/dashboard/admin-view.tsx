@@ -42,7 +42,6 @@ export default function AdminView() {
             });
 
             if (res.ok) {
-                // Refresh list locally or refetch
                 setUsers(users.map(u => u.id === userId ? { ...u, is_approved: true } : u));
             }
         } catch (error) {
@@ -67,81 +66,78 @@ export default function AdminView() {
     };
 
     if (loading) return (
-        <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <div className="flex justify-start items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-800"></div>
         </div>
     );
 
     return (
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg border border-gray-200">
-            <div className="px-4 py-5 sm:px-6 bg-gray-50 flex justify-between items-center border-b border-gray-200">
-                <div>
-                    <h3 className="text-lg leading-6 font-bold text-gray-900">User Management</h3>
-                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Approve or reject pending user registrations.</p>
-                </div>
+        <div className="w-full max-w-4xl space-y-4">
+            <div className="flex justify-between items-end">
+                <h3 className="text-xl font-medium text-gray-800">User Management</h3>
                 <button
                     onClick={fetchUsers}
-                    className="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                    className="text-gray-400 hover:text-gray-700 text-xs transition-colors"
                 >
-                    Refresh List
+                    Refresh
                 </button>
             </div>
-            <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {users.length === 0 ? (
-                            <tr>
-                                <td colSpan={4} className="px-6 py-10 text-center text-gray-500">No users found.</td>
+
+            <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                        <thead>
+                            <tr className="border-b border-gray-50">
+                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Role</th>
+                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
+                                <th className="px-6 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">Actions</th>
                             </tr>
-                        ) : users.map((user) => (
-                            <li key={user.id} className="contents">
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                                        <div className="text-sm text-gray-500">{user.email}</div>
+                        </thead>
+                        <tbody className="divide-y divide-gray-50">
+                            {users.length === 0 ? (
+                                <tr>
+                                    <td colSpan={4} className="px-6 py-10 text-center text-sm text-gray-400">No users found.</td>
+                                </tr>
+                            ) : users.map((user) => (
+                                <tr key={user.id} className="hover:bg-gray-50/50 transition-colors group">
+                                    <td className="px-6 py-5 whitespace-nowrap">
+                                        <span className="text-sm text-gray-800 border-b border-gray-800 pb-0.5">{user.email}</span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-500">
                                         {user.role}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.is_approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                    <td className="px-6 py-5 whitespace-nowrap">
+                                        <span className={`px-3 py-1 text-[10px] font-bold rounded-full ${user.is_approved ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'}`}>
                                             {user.is_approved ? 'Approved' : 'Pending'}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                    <td className="px-6 py-5 whitespace-nowrap text-right space-x-3">
                                         {!user.is_approved && user.role !== 'admin' && (
                                             <>
                                                 <button
                                                     onClick={() => approveUser(user.id)}
-                                                    className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                                    className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 uppercase tracking-wider"
                                                 >
                                                     Approve
                                                 </button>
                                                 <button
                                                     onClick={() => rejectUser(user.id)}
-                                                    className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                                    className="text-[10px] font-bold text-red-500 hover:text-red-700 uppercase tracking-wider"
                                                 >
                                                     Reject
                                                 </button>
                                             </>
                                         )}
                                         {user.role === 'admin' && (
-                                            <span className="text-gray-400 italic">Protected</span>
+                                            <span className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">System</span>
                                         )}
                                     </td>
                                 </tr>
-                            </li>
-                        ))}
-                    </tbody>
-                </table>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

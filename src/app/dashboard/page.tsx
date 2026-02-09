@@ -3,36 +3,39 @@ import AdminView from './admin-view';
 import UserView from './user-view';
 import { SignOutButton } from '@/components/auth-ui';
 
-/**
- * Dashboard page.
- * Access is strictly controlled by middleware (/src/middleware.ts and /src/auth.config.ts).
- * Unauthenticated users are redirected to /login.
- * Unapproved users are redirected to /pending.
- */
 export default async function DashboardPage() {
     const session = await auth();
 
-    // Redundant guard; middleware already protects this route.
     if (!session?.user) return null;
 
     return (
-        <div className="space-y-6">
-            <div className="md:flex md:items-center md:justify-between bg-white p-6 shadow sm:rounded-lg">
-                <div className="min-w-0 flex-1">
-                    <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight text-indigo-600">
-                        {session.user.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}
-                    </h2>
+        <div className="min-h-screen flex">
+            {/* Left Side: White Background */}
+            <div className="w-1/2 bg-white min-h-screen p-8 flex flex-col items-start space-y-8">
+                <div>
+                    <h1 className="text-3xl font-medium text-gray-800 border-b-4 border-gray-800 pb-1 inline-block">
+                        Welcome, {session.user.email}
+                    </h1>
                 </div>
-                <div className="mt-4 flex md:ml-4 md:mt-0">
-                    <SignOutButton />
+
+                <div className="w-full">
+                    {session.user.role === 'admin' ? (
+                        <AdminView />
+                    ) : (
+                        <UserView user={session.user} />
+                    )}
+                </div>
+
+                <div className="mt-auto pt-8">
+                    <SignOutButton className="bg-gray-800 hover:bg-black" />
                 </div>
             </div>
 
-            {session.user.role === 'admin' ? (
-                <AdminView />
-            ) : (
-                <UserView user={session.user} />
-            )}
+            {/* Right Side: Black Background */}
+            <div className="w-1/2 bg-black min-h-screen">
+                {/* Decorative or future content area as per image */}
+            </div>
         </div>
     );
 }
+
