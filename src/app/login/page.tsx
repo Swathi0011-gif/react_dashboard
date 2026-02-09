@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 
 function LoginForm() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('test@test.com');
+    const [password, setPassword] = useState('Test123@123');
     const [error, setError] = useState('');
     const router = useRouter();
     const searchParams = useSearchParams();
