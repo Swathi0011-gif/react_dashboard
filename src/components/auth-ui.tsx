@@ -47,33 +47,33 @@ export function LoginForm({ message, error: initialError }: { message?: string |
     };
 
     return (
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md border border-gray-100">
-            <div className="text-center">
-                <h2 className="text-3xl font-extrabold text-gray-900">Login</h2>
-                <p className="mt-2 text-sm text-gray-600">Access your dashboard</p>
+        <div className="w-full space-y-8">
+            <div className="text-left">
+                <h2 className="text-4xl font-medium text-gray-800 tracking-tight">Login</h2>
+                <p className="mt-3 text-gray-500 font-light">Access your workspace and dashboard</p>
             </div>
 
-            {message && <div className="p-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded text-center font-medium">{message}</div>}
-            {error && <div className="p-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded text-center font-medium">{error}</div>}
+            {message && <div className="p-4 text-sm text-green-600 bg-green-50 border-l-4 border-green-500 rounded font-medium">{message}</div>}
+            {error && <div className="p-4 text-sm text-red-600 bg-red-50 border-l-4 border-red-500 rounded font-medium">{error}</div>}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Email Address</label>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email Address</label>
                     <input
                         type="email"
                         required
-                        className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        className="w-full px-0 py-3 border-b border-gray-200 focus:outline-none focus:border-gray-800 bg-transparent transition-colors text-gray-800"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="admin@example.com"
+                        placeholder="email@example.com"
                     />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Password</label>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Password</label>
                     <input
                         type="password"
                         required
-                        className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        className="w-full px-0 py-3 border-b border-gray-200 focus:outline-none focus:border-gray-800 bg-transparent transition-colors text-gray-800"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
@@ -82,15 +82,15 @@ export function LoginForm({ message, error: initialError }: { message?: string |
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex justify-center items-center px-4 py-2 font-bold text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors disabled:opacity-50"
+                    className="w-full py-4 bg-gray-900 text-white font-bold rounded-lg hover:bg-black transition-all flex justify-center items-center shadow-lg shadow-black/10 disabled:opacity-50"
                 >
-                    {loading ? 'Logging in...' : <><FiLogIn className="mr-2" /> Login</>}
+                    {loading ? 'Processing...' : <><FiLogIn className="mr-2" /> Continue</>}
                 </button>
             </form>
-            <p className="text-center text-sm text-gray-600 mt-4">
-                Don't have an account?{' '}
-                <Link href="/signup" className="text-indigo-600 font-semibold hover:underline">
-                    Sign Up
+            <p className="text-center text-sm text-gray-500">
+                New here?{' '}
+                <Link href="/signup" className="text-gray-900 font-bold hover:underline decoration-2 underline-offset-4">
+                    Create account
                 </Link>
             </p>
         </div>
@@ -134,43 +134,43 @@ export function SignUpForm() {
     };
 
     return (
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md border border-gray-100">
-            <div className="text-center">
-                <h2 className="text-3xl font-extrabold text-gray-900">Create Account</h2>
-                <p className="mt-2 text-sm text-gray-600">Join our platform today</p>
+        <div className="w-full space-y-8">
+            <div className="text-left">
+                <h2 className="text-4xl font-medium text-gray-800 tracking-tight">Register</h2>
+                <p className="mt-3 text-gray-500 font-light">Join our exclusive platform</p>
             </div>
 
-            {error && <div className="p-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded text-center font-medium">{error}</div>}
+            {error && <div className="p-4 text-sm text-red-600 bg-red-50 border-l-4 border-red-500 rounded font-medium">{error}</div>}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Full Name</label>
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Full Name</label>
                     <input
                         type="text"
                         required
-                        className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        className="w-full px-0 py-3 border-b border-gray-200 focus:outline-none focus:border-gray-800 bg-transparent transition-colors text-gray-800"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="John Doe"
                     />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Email Address</label>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Email Address</label>
                     <input
                         type="email"
                         required
-                        className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        className="w-full px-0 py-3 border-b border-gray-200 focus:outline-none focus:border-gray-800 bg-transparent transition-colors text-gray-800"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="john@example.com"
+                        placeholder="email@example.com"
                     />
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Password</label>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Password</label>
                     <input
                         type="password"
                         required
-                        className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                        className="w-full px-0 py-3 border-b border-gray-200 focus:outline-none focus:border-gray-800 bg-transparent transition-colors text-gray-800"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
@@ -179,14 +179,14 @@ export function SignUpForm() {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full flex justify-center items-center px-4 py-2 font-bold text-white bg-indigo-600 rounded hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                    className="w-full py-4 bg-gray-900 text-white font-bold rounded-lg hover:bg-black transition-all flex justify-center items-center shadow-lg shadow-black/10 disabled:opacity-50"
                 >
-                    {loading ? 'Creating Account...' : <><FiUserPlus className="mr-2" /> Sign Up</>}
+                    {loading ? 'Creating...' : <><FiUserPlus className="mr-2" /> Sign Up</>}
                 </button>
             </form>
-            <p className="text-center text-sm text-gray-600 mt-4">
-                Already have an account?{' '}
-                <Link href="/login" className="text-indigo-600 font-semibold hover:underline">
+            <p className="text-center text-sm text-gray-500">
+                Already registered?{' '}
+                <Link href="/login" className="text-gray-900 font-bold hover:underline decoration-2 underline-offset-4">
                     Login
                 </Link>
             </p>
