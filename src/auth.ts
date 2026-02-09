@@ -21,27 +21,43 @@ export const {
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) return null;
 
-                const email = credentials.email as string;
-                const password = credentials.password as string;
+                try {
+                    const email = credentials.email as string;
+                    const password = credentials.password as string;
 
-                // Query database for user
-                const result = await query('SELECT * FROM users WHERE email = $1', [email]);
-                const user = result.rows[0];
+                    // Query database for user
+                    const result = await query('SELECT * FROM users WHERE email = $1', [email]);
+                    const user = result.rows[0];
 
-                if (!user) return null;
+                    if (!user) {
+                        console.log(`Auth failed: User not found for email ${email}`);
+                        return null;
+                    }
 
-                // Verify password
-                const passwordsMatch = await bcrypt.compare(password, user.password);
-                if (!passwordsMatch) return null;
+                    // Verify password
+                    const passwordsMatch = await bcrypt.compare(password, user.password);
+                    if (!passwordsMatch) {
+                        console.log(`Auth failed: Password mismatch for ${email}`);
+                        return null;
+                    }
 
-                // Return user object with approval status and role for session
-                return {
-                    id: user.id.toString(),
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                    is_approved: user.is_approved,
-                };
+                    // Special case for the test admin requested by user
+                    const isAdmin = user.email === 'test@test.com' || user.role === 'admin';
+
+                    // Return user object with approval status and role for session
+                    // Note: NextAuth v5 expects the id to be a string
+                    return {
+                        id: user.id.toString(),
+                        name: user.name,
+                        email: user.email,
+                        role: isAdmin ? 'admin' : user.role,
+                        is_approved: isAdmin ? true : user.is_approved,
+                    };
+                } catch (error) {
+                    console.error('CRITICAL: Error in authorize function:', error);
+                    // Throwing here will result in a generic error code in NextAuth
+                    return null;
+                }
             },
         }),
     ],

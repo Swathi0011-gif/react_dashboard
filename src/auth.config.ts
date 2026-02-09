@@ -28,19 +28,20 @@ export const authConfig = {
                 return true;
             }
 
-            // If logged in but NOT approved
-            if (isLoggedIn && !isApproved) {
+            // If logged in but NOT approved (and NOT an admin)
+            // Admins should never see the pending page even if is_approved is false (though it should be true)
+            if (isLoggedIn && !isApproved && auth?.user?.role !== 'admin') {
                 if (isOnPending) return true; // Already on pending page
                 return Response.redirect(new URL('/pending', nextUrl));
             }
 
-            // If logged in AND approved
-            if (isLoggedIn && isApproved) {
+            // If logged in AND approved (or is an admin)
+            if (isLoggedIn && (isApproved || auth?.user?.role === 'admin')) {
                 if (isOnPending || isOnLogin || isOnSignup) {
                     return Response.redirect(new URL('/dashboard', nextUrl));
                 }
 
-                // Admin page protection
+                // Admin page protection (for any theoretical /admin routes)
                 if (isOnAdmin && auth.user.role !== 'admin') {
                     return Response.redirect(new URL('/dashboard', nextUrl));
                 }
