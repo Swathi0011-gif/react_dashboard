@@ -6,9 +6,27 @@ export async function POST(request: Request) {
     try {
         const { name, email, password } = await request.json();
 
+        // 1. Validate required fields
         if (!name || !email || !password) {
             return NextResponse.json(
-                { message: 'Missing required fields' },
+                { message: 'Missing required fields', error: 'Name, email, and password are all required.' },
+                { status: 400 }
+            );
+        }
+
+        // 2. Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return NextResponse.json(
+                { message: 'Invalid email format', error: 'Please provide a valid email address.' },
+                { status: 400 }
+            );
+        }
+
+        // 3. Validate password length
+        if (password.length < 6) {
+            return NextResponse.json(
+                { message: 'Password too short', error: 'Password must be at least 6 characters long.' },
                 { status: 400 }
             );
         }
@@ -35,10 +53,14 @@ export async function POST(request: Request) {
             { message: 'User created successfully', user: result.rows[0] },
             { status: 201 }
         );
-    } catch (error) {
+    } catch (error: any) {
         console.error('Signup error:', error);
         return NextResponse.json(
-            { message: 'Internal server error' },
+            {
+                message: 'Internal server error',
+                error: error.message,
+                hint: 'Ensure DATABASE_URL is correct and the users table exists.'
+            },
             { status: 500 }
         );
     }

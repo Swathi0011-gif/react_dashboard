@@ -26,10 +26,13 @@ export default function SignupPage() {
                 router.push('/login?message=Account created. Please wait for admin approval.');
             } else {
                 const data = await res.json();
-                setError(data.message || 'Something went wrong');
+                let errMsg = data.message || 'Something went wrong';
+                if (data.error) errMsg += `: ${data.error}`;
+                if (data.hint) errMsg += ` (Hint: ${data.hint})`;
+                setError(errMsg);
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            setError('A network error occurred or the server is unreachable. Please check your connection.');
         }
     };
 

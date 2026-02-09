@@ -12,9 +12,13 @@ export async function GET(request: Request) {
     try {
         const result = await query('SELECT id, name, email, role, is_approved, created_at FROM users ORDER BY created_at DESC');
         return NextResponse.json(result.rows);
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching users:', error);
-        return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+        return NextResponse.json({
+            message: 'Internal server error',
+            error: error.message,
+            hint: 'Ensure DATABASE_URL is correct and the users table exists.'
+        }, { status: 500 });
     }
 }
 
@@ -35,8 +39,12 @@ export async function PATCH(request: Request) {
         await query('UPDATE users SET is_approved = TRUE WHERE id = $1', [userId]);
 
         return NextResponse.json({ message: 'User approved' });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error approving user:', error);
-        return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+        return NextResponse.json({
+            message: 'Internal server error',
+            error: error.message,
+            hint: 'Ensure DATABASE_URL is correct and the users table exists.'
+        }, { status: 500 });
     }
 }
