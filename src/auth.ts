@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { query } from '@/lib/db';
 import { authConfig } from './auth.config';
 
@@ -54,9 +54,9 @@ export const {
         },
         async session({ session, token }) {
             if (token) {
-                session.user.id = token.id;
-                session.user.role = token.role;
-                session.user.is_approved = token.is_approved;
+                session.user.id = token.id as string;
+                session.user.role = token.role as string;
+                session.user.is_approved = token.is_approved as boolean;
             }
             return session;
         },
