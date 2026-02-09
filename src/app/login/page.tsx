@@ -15,6 +15,17 @@ function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const message = searchParams.get('message');
+    const authError = searchParams.get('error');
+
+    // Friendly error messages for common NextAuth errors
+    const getErrorMessage = (errCode: string | null) => {
+        if (!errCode) return null;
+        if (errCode === 'CredentialsSignin') return 'Invalid email or password';
+        if (errCode === 'AccessDenied') return 'You need to be approved to access this content';
+        return 'An error occurred during sign in. Please try again.';
+    };
+
+    const displayError = error || getErrorMessage(authError);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,8 +48,8 @@ function LoginForm() {
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
                 <h2 className="text-2xl font-bold text-center text-gray-900">Login</h2>
-                {message && <div className="p-2 text-sm text-green-700 bg-green-100 rounded">{message}</div>}
-                {error && <div className="p-2 text-sm text-red-700 bg-red-100 rounded">{error}</div>}
+                {message && <div className="p-2 text-sm text-green-700 bg-green-100 rounded text-center">{message}</div>}
+                {displayError && <div className="p-2 text-sm text-red-700 bg-red-100 rounded text-center">{displayError}</div>}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Email</label>

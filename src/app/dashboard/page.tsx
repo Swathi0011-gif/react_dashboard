@@ -1,21 +1,25 @@
 import { auth } from '@/auth';
-import { redirect } from 'next/navigation';
 import AdminView from './admin-view';
 import UserView from './user-view';
 
+/**
+ * Dashboard page.
+ * Access is strictly controlled by middleware (/src/middleware.ts and /src/auth.config.ts).
+ * Unauthenticated users are redirected to /login.
+ * Unapproved users are redirected to /pending.
+ */
 export default async function DashboardPage() {
     const session = await auth();
 
-    if (!session) {
-        redirect('/login');
-    }
+    // Redundant guard; middleware already protects this route.
+    if (!session?.user) return null;
 
     return (
         <div className="space-y-6">
             <div className="md:flex md:items-center md:justify-between">
                 <div className="min-w-0 flex-1">
                     <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                        Dashboard
+                        {session.user.role === 'admin' ? 'Admin Dashboard' : 'User Dashboard'}
                     </h2>
                 </div>
             </div>
