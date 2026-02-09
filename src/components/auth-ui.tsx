@@ -10,8 +10,8 @@ import { FiLogOut, FiUserPlus, FiLogIn } from 'react-icons/fi';
  * Login Form Component
  */
 export function LoginForm({ message, error: initialError }: { message?: string | null, error?: string | null }) {
-    const [email, setEmail] = useState('test@test.com');
-    const [password, setPassword] = useState('Test123@123');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState(initialError || '');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
